@@ -3,17 +3,18 @@
 #include <cstring>
 #include <string>
 #include <fstream>
+#include <limits>
 using namespace std;
 
 WCHAR username[256];
 int asadmin=0;
 
 void helpf(){
-    cout<<endl<<"- - - - - - Commands - - - - - -"<<endl;
-    cout<<"Delete - rm <filedirectory> (This is permanent)"<<endl;
-    cout<<"Copy and Paste - cp <filedirectory> <pastingdirectory>"<<endl;
+    cout<<endl<<"- - - - - - - - Commands - - - - - - - -"<<endl;
+    cout<<"Delete - rm <filedirectory> [REQUIRES ADMIN PRIVILEGES]"<<endl;
+    cout<<"Copy and Paste - cp <filedirectory> <pastingdirectory> [REQUIRES ADMIN PRIVILEGES]"<<endl;
+    cout<<"Create File - cf <filename.extension> [REQUIRES ADMIN PRIVILEGES]"<<endl;
     cout<<"Open File - op <filedirectory>"<<endl;
-    cout<<"To exit program - EXIT"<<endl;
     cout<<"Display all files in the directory - list"<<endl;
     cout<<"Go to a directory - goto <directory>"<<endl;
     cout<<"Go to Desktop directory - DESKTOP"<<endl;
@@ -21,7 +22,11 @@ void helpf(){
     cout<<"Go to Document directory - DOCUMENT"<<endl;
     cout<<"Go to Picture directory - PICTURE"<<endl;
     cout<<"Go to Video directory - VIDEO"<<endl;
-    cout<<endl<<"- - - - - - - - - - - - - - - - -"<<endl;
+    if(asadmin==0){
+        cout<<"Switch to Admin - ADMIN"<<endl;
+    }
+    cout<<"To exit program - EXIT"<<endl;
+    cout<<endl<<"- - - - - - - - - - - - - - - - - - - - -"<<endl;
 }
 
 int verifyadmin() {
@@ -32,7 +37,6 @@ int verifyadmin() {
         getline(file, password);
         file.close();
         cout << "Enter Password: ";
-        cin.ignore();
         getline(cin, ipassword);
         if (ipassword==password){
             cout<<"Welcome Admin !"<<endl;
@@ -46,7 +50,6 @@ int verifyadmin() {
         ofstream file("pas.dat", ios::binary);
         if (file.is_open()){
             cout<< "Enter New Password: ";
-            cin.ignore();
             getline(cin, repassword);
             file<<repassword; 
             file.close();
@@ -62,8 +65,8 @@ int verifyadmin() {
 
 void runasadmin(){
     string adinput;
+    cout<<"Type !help for commands"<<endl;
     while(true){
-        cout<<"Type !help for commands"<<endl;
         cout<<"BAT C:/Users/admin>> ";
         getline(cin,adinput);
         if(adinput=="!help"){
@@ -71,22 +74,81 @@ void runasadmin(){
         }else if (adinput=="EXIT"){
             break;
             exit(1);
+        }else if(adinput=="rm"){
+            //DELETE function
+        }else if(adinput=="cp"){
+            //Copy & Paste Function, ask if u dont understand
+        }else if(adinput=="op"){
+            //Open function
+        }else if(adinput=="cf"){
+            //Create file function
+        }else if(adinput=="list"){
+            // display all files in directory
+        }else if(adinput=="goto"){
+            //go to a directory function (goto <directory>)
+        }else if(adinput=="DESKTOP"){
+            //go to Desktop 
+        }else if(adinput=="DOWNLOAD"){
+            //go to download
+        }else if(adinput=="DOCUMENT"){
+            //go to document
+        }else if(adinput=="PICTURE"){
+            //go to picture
+        }else if(adinput=="VIDEO"){
+            //go to video
+        }else{
+            cout<<"'"<<adinput<<"' is not recognized as an internal or external command"<<endl;
         }
+
         
     }
 }
 
 void runasuser(){
+    int checkad=0;
     string usinput;
+    cout<<"Type !help for commands"<<endl;
     while(true){
-        cout<<"Type !help for commands"<<endl;
-        cout<<"BAT C:/Users/admin>> ";
+        wcout<<L"BAT C:/Users/"<<username<<L">> ";
         getline(cin,usinput);
         if(usinput=="!help"){
             helpf();
-        }else if (usinput=="EXIT"){
+        }else if(usinput=="EXIT"){
             break;
             exit(1);
+        }else if(usinput=="ADMIN"){
+            checkad=verifyadmin();
+            if(checkad==1){
+                asadmin=1;
+                runasadmin();
+                return;
+            }else{
+                cout<<"Access denied. Staying in user mode."<<endl;
+            }
+        }else if(usinput=="rm"){
+            cout<<"Access denied. Requires Admin Privileges!"<<endl;
+        }else if(usinput=="cp"){
+            cout<<"Access denied. Requires Admin Privileges!"<<endl;
+        }else if(usinput=="op"){
+            //Open function
+        }else if(usinput=="cf"){
+            cout<<"Access denied. Requires Admin Privileges!"<<endl;
+        }else if(usinput=="list"){
+            // display all files in directory
+        }else if(usinput=="goto"){
+            //go to a directory function (goto <directory>)
+        }else if(usinput=="DESKTOP"){
+            //go to Desktop 
+        }else if(usinput=="DOWNLOAD"){
+            //go to download
+        }else if(usinput=="DOCUMENT"){
+            //go to document
+        }else if(usinput=="PICTURE"){
+            //go to picture
+        }else if(usinput=="VIDEO"){
+            //go to video
+        }else{
+            cout<<"'"<<usinput<<"' is not recognized as an internal or external command."<<endl;
         }
     }
 }
@@ -123,6 +185,7 @@ int main(){
             break;
         }
     }
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // ← ✅ Only here
     if(asadmin==1){
         a=verifyadmin();
         if(a==1){
@@ -130,7 +193,8 @@ int main(){
         }else{
             runasuser();
         }
-    }else{
+    }
+    if(asadmin==0){
         runasuser();
     }
     
