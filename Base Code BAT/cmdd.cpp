@@ -65,7 +65,6 @@ void runasadmin(){
     while(true){
         cout<<"Type !help for commands"<<endl;
         cout<<"BAT C:/Users/admin>> ";
-        cin.ignore();
         getline(cin,adinput);
         if(adinput=="!help"){
             helpf();
@@ -82,7 +81,6 @@ void runasuser(){
     while(true){
         cout<<"Type !help for commands"<<endl;
         cout<<"BAT C:/Users/admin>> ";
-        cin.ignore();
         getline(cin,usinput);
         if(usinput=="!help"){
             helpf();
