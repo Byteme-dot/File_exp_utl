@@ -4,6 +4,8 @@
 #include <string>
 #include <fstream>
 #include <limits>
+#include <filesystem>
+
 using namespace std;
 
 WCHAR username[256];
