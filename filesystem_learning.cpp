@@ -10,6 +10,15 @@ int main(){
         name=entry.path().filename().string(); // To copy the name of the file/folder we need to add .string() in the end.
     }
 
-    cout<<endl<<name; //prints the last folder in the directory
+    cout<<endl<<name; //prints the last folder in the directory 
+
+    //To create a new directory(folder)
+    fs::create_directory("D:/Games/new_folder");
+    
+    //To delete a folder
+    fs::remove("D:/Games/new_folder");
+
+    
+
     return 0;
 }
